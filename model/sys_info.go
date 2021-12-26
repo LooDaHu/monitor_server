@@ -2,7 +2,9 @@ package model
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	. "monitor_server/utils"
 )
 
@@ -54,11 +56,40 @@ type DiskInfo struct {
 	Used  uint64 `json:"used"`
 }
 
-func CreateSystemInfo(sysInfo *SysInfo) error {
+type SysInfoer interface {
+	CreateSystemInfo(sysInfo *SysInfo) error
+	RetrieveSystemInfo(filter bson.M) (*SysInfo, error)
+	UpdateSystemInfo(sysInfo *SysInfo) error
+	DeleteSystemInfo(id string) error
+}
+
+func (s SysInfo) UpdateSystemInfo(sysInfo *SysInfo) error {
+	return nil
+}
+
+func (s SysInfo) DeleteSystemInfo(id string) error {
+	return nil
+}
+
+func (s SysInfo) CreateSystemInfo(sysInfo *SysInfo) error {
 	_, err := GlobalDatabase.Collection(
 		KMongoSysInfoCollection).InsertOne(context.TODO(), sysInfo)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s SysInfo) RetrieveSystemInfo(filter bson.M) (*SysInfo, error) {
+	var info *SysInfo
+	res := GlobalDatabase.Collection(KMongoSysInfoCollection).FindOne(context.TODO(), filter)
+	err := res.Decode(&info)
+	if err != nil {
+		if err == mongo.ErrNilDocument || err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		SugarLogger.Error("MONGODB ERROR@RetrieveSystemInfo, Error Info:", err)
+		return nil, err
+	}
+	return info, nil
 }

@@ -27,21 +27,36 @@ const (
 	KUserTypeGuest       = "guest"
 )
 
-// CheckUserInfo 检查用户信息
-func CheckUserInfo(username string, password string) (bool, string, string, error) {
-	var user User
-	filter := bson.M{
-		"username": username,
-		"password": password,
-	}
+type Userer interface {
+	CreateUserInfo(user *User) error
+	RetrieveUserInfo(filter bson.M) (*User, error)
+	UpdateUserInfo(user *User) error
+	DeleteUserInfo(id string) error
+}
+
+func (u User) CreateUserInfo(user *User) error {
+	return nil
+}
+
+func (u User) UpdateUserInfo(user *User) error {
+	return nil
+}
+
+func (u User) DeleteUserInfo(id string) error {
+	return nil
+}
+
+// RetrieveUserInfo 查询用户信息
+func (u User) RetrieveUserInfo(filter bson.M) (*User, error) {
+	var user *User
 	res := GlobalDatabase.Collection(KMongoUserCollection).FindOne(context.TODO(), filter)
 	err := res.Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNilDocument || err == mongo.ErrNoDocuments {
-			return false, "", "", nil
+			return nil, nil
 		}
-		SugarLogger.Error("MONGODB ERROR@CheckUserInfo, Error Info:", err)
-		return false, "", "", err
+		SugarLogger.Error("MONGODB ERROR@RetrieveUserInfo, Error Info:", err)
+		return nil, err
 	}
-	return true, user.ID.Hex(), user.Type, nil
+	return user, nil
 }

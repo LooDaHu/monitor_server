@@ -1,5 +1,12 @@
 package message
 
+type QuerySystemInfoReq struct {
+	HostName  string `json:"host_name"`
+	OS        string `json:"os"`
+	StartTime uint32 `json:"start_time"`
+	EndTime   uint32 `json:"end_time"`
+}
+
 type UploadSystemInfoReq struct {
 	Host    HostInfo    `json:"host"`
 	Network NetworkInfo `json:"network"`
