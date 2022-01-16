@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readconcern"
@@ -36,7 +35,7 @@ func init() {
 		Key:      "",
 	}
 	if _, err := newClientFromConf(&mongo); err != nil {
-		panic(fmt.Sprintf("[MONGODB] NEW CONNECT FAIL: %s \n", err))
+		//panic(fmt.Sprintf("[MONGODB] NEW CONNECT FAIL: %s \n", err))
 	}
 }
 

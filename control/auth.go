@@ -20,7 +20,8 @@ const (
 )
 
 type ControllerAuth struct {
-	user model.User
+	user    model.User
+	appCode model.AppCode
 }
 
 // Login 用户登录
@@ -95,7 +96,7 @@ func (ca ControllerAuth) AppCodeCheckRequired(c *gin.Context) {
 		return
 	}
 
-	appCode, err := model.RetrieveAppCode(bson.M{
+	appCode, err := ca.appCode.RetrieveAppCode(bson.M{
 		"app_id":   keyValue[0],
 		"app_code": keyValue[1],
 	})

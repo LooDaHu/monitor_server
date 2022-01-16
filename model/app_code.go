@@ -14,9 +14,15 @@ type AppCode struct {
 
 const (
 	KMongoAppCodeCollection = "app_code"
+	KTestAppId              = "1234567890"
+	KTestAppCode            = "hello"
 )
 
-func RetrieveAppCode(filter bson.M) (*AppCode, error) {
+type Coder interface {
+	RetrieveAppCode(m bson.M) (*AppCode, error)
+}
+
+func (a AppCode) RetrieveAppCode(filter bson.M) (*AppCode, error) {
 	var appCode *AppCode
 	res := GlobalDatabase.Collection(KMongoAppCodeCollection).FindOne(context.TODO(), filter)
 	err := res.Decode(&appCode)
