@@ -53,7 +53,7 @@ func (u User) RetrieveUserInfo(filter bson.M) (*User, error) {
 	err := res.Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNilDocument || err == mongo.ErrNoDocuments {
-			return nil, nil
+			return &User{}, nil
 		}
 		SugarLogger.Error("MONGODB ERROR@RetrieveUserInfo, Error Info:", err)
 		return nil, err

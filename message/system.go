@@ -1,10 +1,10 @@
 package message
 
 type QuerySystemInfoReq struct {
-	HostName  string `json:"host_name"`
-	OS        string `json:"os"`
-	StartTime uint32 `json:"start_time"`
-	EndTime   uint32 `json:"end_time"`
+	HostName  string `json:"host_name" binding:"required,alphanum"`
+	OS        string `json:"os" binding:"required,alphanum"`
+	StartTime uint32 `json:"start_time" binding:"required"`
+	EndTime   uint32 `json:"end_time" binding:"required"`
 }
 
 type UploadSystemInfoReq struct {

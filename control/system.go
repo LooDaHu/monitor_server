@@ -2,12 +2,13 @@ package control
 
 import (
 	"encoding/json"
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"net/http"
-	"time"
 
 	"monitor_server/message"
 	"monitor_server/model"
